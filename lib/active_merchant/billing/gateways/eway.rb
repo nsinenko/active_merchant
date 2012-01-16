@@ -186,6 +186,7 @@ module ActiveMerchant #:nodoc:
       def add_invoice_data(post, options)
         post[:CustomerInvoiceRef] = options[:order_id]
         post[:CustomerInvoiceDescription] = options[:description]
+        # logger.debug post.inspect
       end
 
       def add_optional_data(post)
@@ -246,6 +247,8 @@ module ActiveMerchant #:nodoc:
           root.add_element("eway#{key}").text = value
         end    
         xml.to_s
+        
+        logger.debug xml.inspect
       end
     
       def message_from(message)
