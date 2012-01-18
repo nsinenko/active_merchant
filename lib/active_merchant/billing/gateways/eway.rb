@@ -144,7 +144,7 @@ module ActiveMerchant #:nodoc:
       # ewayCustomerEmail, ewayCustomerAddress, ewayCustomerPostcode
       def purchase(money, creditcard, options = {})
         requires!(options, :order_id)
-
+        p options.inspect
         post = {}
         add_creditcard(post, creditcard)
         add_address(post, options)  
@@ -185,6 +185,7 @@ module ActiveMerchant #:nodoc:
       
       def add_invoice_data(post, options)
         post[:CustomerInvoiceRef] = options[:order_id]
+        # logger.debug "\nDESCRIPTION IN EWAY.RB" + options[:description]
         post[:CustomerInvoiceDescription] = options[:description]
         # logger.debug post.inspect
       end
@@ -244,11 +245,19 @@ module ActiveMerchant #:nodoc:
         root  = xml.add_element("ewaygateway")
         
         parameters.each do |key, value|
-          root.add_element("eway#{key}").text = value
-        end    
+          if key == :CustomerInvoiceDescription
+            el = root.add_element("ewayCustomerInvoiceDescription")
+            el2 = el.add_element("AccountingInfo")
+                    
+            value.keys.each do |hash_key|
+             el2.add_element("#{hash_key}").text = value[hash_key]
+            end
+          else
+            root.add_element("eway#{key}").text = value
+          end
+        end
+
         xml.to_s
-        
-        logger.debug xml.inspect
       end
     
       def message_from(message)
