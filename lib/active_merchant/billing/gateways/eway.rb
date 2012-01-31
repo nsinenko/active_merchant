@@ -146,7 +146,6 @@ module ActiveMerchant #:nodoc:
       # ewayCustomerEmail, ewayCustomerAddress, ewayCustomerPostcode
       def purchase(money, creditcard, options = {})
         requires!(options, :order_id)
-        p options.inspect
         post = {}
         add_creditcard(post, creditcard)
         add_address(post, options)  
