@@ -260,6 +260,8 @@ module ActiveMerchant #:nodoc:
           end
         end
 
+        p '--------- ' + xml.to_s
+
         xml.to_s
       end
     
