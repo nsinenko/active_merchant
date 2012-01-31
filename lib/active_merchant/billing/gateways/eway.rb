@@ -259,7 +259,7 @@ module ActiveMerchant #:nodoc:
             root.add_element("eway#{key}").text = value
           end
         end
-
+        p File.dirname(__FILE__).to_s
         p '--------- ' + xml.to_s
 
         xml.to_s
