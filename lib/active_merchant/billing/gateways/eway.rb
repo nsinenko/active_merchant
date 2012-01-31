@@ -189,15 +189,15 @@ module ActiveMerchant #:nodoc:
       def add_invoice_data(post, options)
         post[:CustomerInvoiceRef] = options[:order_id]
         post[:CustomerInvoiceDescription] = options[:description]
+        post[:CustomerIPAddress] = options[:ip_address]
+        post[:CustomerBillingCountry] = options[:billing_country]
       end
 
       def add_optional_data(post)
         post[:TrxnNumber] = nil
         post[:Option1] = nil
         post[:Option2] = nil
-        post[:Option3] = nil
-        post[:CustomerIPAddress] = options[:ip_address]
-        post[:CustomerBillingCountry] = options[:billing_country]     
+        post[:Option3] = nil 
       end
 
       def commit(money, parameters)       
@@ -259,9 +259,7 @@ module ActiveMerchant #:nodoc:
             root.add_element("eway#{key}").text = value
           end
         end
-        p File.dirname(__FILE__).to_s
-        p '--------- ' + xml.to_s
-
+        
         xml.to_s
       end
     
