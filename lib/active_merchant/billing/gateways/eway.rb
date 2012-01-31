@@ -66,6 +66,8 @@ module ActiveMerchant #:nodoc:
       TEST_CVN_URL = 'https://www.eway.com.au/gateway_cvn/xmltest/testpage.asp'
       LIVE_CVN_URL = 'https://www.eway.com.au/gateway_cvn/xmlpayment.asp'
       
+      LIVE_BEAGLE_URL = 'https://www.eway.com.au/gateway_cvn/xmlbeagle.asp'
+      
       MESSAGES = {
         "00" => "Transaction Approved",
         "01" => "Refer to Issuer",
@@ -150,6 +152,7 @@ module ActiveMerchant #:nodoc:
         add_address(post, options)  
         add_customer_data(post, options)
         add_invoice_data(post, options)
+        
         # The request fails if all of the fields aren't present
         add_optional_data(post)
     
@@ -185,16 +188,16 @@ module ActiveMerchant #:nodoc:
       
       def add_invoice_data(post, options)
         post[:CustomerInvoiceRef] = options[:order_id]
-        # logger.debug "\nDESCRIPTION IN EWAY.RB" + options[:description]
         post[:CustomerInvoiceDescription] = options[:description]
-        # logger.debug post.inspect
       end
 
       def add_optional_data(post)
         post[:TrxnNumber] = nil
         post[:Option1] = nil
         post[:Option2] = nil
-        post[:Option3] = nil     
+        post[:Option3] = nil
+        post[:CustomerIPAddress] = options[:ip_address]
+        post[:CustomerBillingCountry] = options[:billing_country]     
       end
 
       def commit(money, parameters)       
@@ -278,9 +281,9 @@ module ActiveMerchant #:nodoc:
       
       def gateway_url(cvn, test)
         if cvn
-          test ? TEST_CVN_URL : LIVE_CVN_URL
+          test ? TEST_CVN_URL : LIVE_BEAGLE_URL
         else
-          test ? TEST_URL : LIVE_URL
+          test ? TEST_URL : LIVE_BEAGLE_URL
         end
       end
       
